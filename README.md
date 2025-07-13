@@ -1,112 +1,97 @@
 # Sistem Klasifikasi Kualitas Kakao Berdasarkan Fitur Hybrid Menggunakan Metode SVM
 
-## Abstrak
+Repositori ini berisi implementasi klasifikasi kualitas biji kakao (Theobroma cacao) menggunakan metode Support Vector Machine (SVM) dengan fitur hybrid (tekstur grayscale dan spektroskopik). Proyek terdiri dari dua komponen utama:
 
-Penelitian ini bertujuan untuk mengembangkan sistem klasifikasi otomatis kualitas biji kakao (Theobroma cacao) menggunakan metode Support Vector Machine (SVM) dengan fitur hybrid yang menggabungkan atribut morfometrik dan spektroskopik. Dataset yang digunakan terdiri dari sampel kakao berlabel kualitas (tinggi, sedang, rendah), diperoleh dari sumber terbuka. Hasil eksperimen menunjukkan bahwa penggunaan kombinasi fitur hybrid meningkatkan akurasi klasifikasi dibandingkan penggunaan fitur tunggal.
+1. **Notebook Pemrosesan & Pelatihan**: `Code_Mengolah_Dataset.ipynb`
+2. **Aplikasi Web (GUI)**: folder `GUI/` hasil ekstraksi `GUI.zip`
 
-## Daftar Isi
+## Struktur Program
 
-* [Latar Belakang](#latar-belakang)
-* [Dataset](#dataset)
-* [Metodologi](#metodologi)
-* [Prasyarat](#prasyarat)
-* [Instalasi](#instalasi)
-* [Penggunaan](#penggunaan)
-* [Hasil dan Evaluasi](#hasil-dan-evaluasi)
-* [Kontribusi](#kontribusi)
-* [Referensi](#referensi)
+### Root
 
-## Latar Belakang
+* **Code\_Mengolah\_Dataset.ipynb**
+  Notebook Jupyter untuk:
 
-Kualitas biji kakao memengaruhi nilai ekonomi dan cita rasa produk akhir. Metode manual untuk evaluasi kualitas seringkali memakan waktu dan bersifat subjektif. Oleh karena itu, sistem otomatis yang andal dan konsisten menjadi solusi yang diperlukan. SVM dipilih karena kemampuannya dalam memisahkan kelas dengan margin maksimal.
+  * Eksplorasi dan visualisasi data kategori (Mentah, Matang, Busuk)
+  * Ekstraksi fitur grayscale (skala intensitas)
+  * Pembagian data (train/test split)
+  * Pelatihan model SVM dan evaluasi
+  * Menyimpan hasil preprocessing (`Hasil_scale.xlsx`) dan model (`svm_model3.pkl`)
 
-## Dataset
+* **Dataset/** (belum disertakan)
+  Folder kosong yang harus diisi dengan citra kakao mentah, matang, dan busuk sesuai struktur:
 
-Dataset terdiri atas dua kelompok fitur:
+  ```text
+  Dataset/
+  ├── Mentah/
+  ├── Matang/
+  └── Busuk/
+  ```
 
-1. **Fitur Morfometrik**: dimensi fisik biji kakao (panjang, lebar, berat).
-2. **Fitur Spektroskopik**: spektrum pantulan cahaya pada berbagai panjang gelombang.
+* **Hasil\_scale.xlsx**
+  File Excel yang dihasilkan oleh notebook, berisi fitur grayscale terukur.
 
-Data sampel beserta label kualitas dapat diunduh dari Google Drive:
+* **svm\_model3.pkl**
+  Model SVM terlatih (tersedia di folder `GUI/`).
 
-> [https://drive.google.com/drive/folders/1dvTbQ6laEP\_HZ8KIP6\_UyW0aWMFFXWlV?usp=sharing](https://drive.google.com/drive/folders/1dvTbQ6laEP_HZ8KIP6_UyW0aWMFFXWlV?usp=sharing)
+### GUI/
 
-## Metodologi
+* **app.py**
+  Skrip Flask untuk antarmuka web klasifikasi.
 
-1. **Pra-pemrosesan Data**
+* **templates/index.html**
+  Halaman utama GUI.
 
-   * Normalisasi variabel numerik
-   * Penanganan nilai hilang
-2. **Ekstraksi Fitur Hybrid**
+* **static/**
 
-   * Penggabungan fitur morfometrik dan spektroskopik
-3. **Pelatihan Model SVM**
+  * **css/style.css**: gaya tampilan.
+  * **uploads/**: contoh citra dan hasil klasifikasi.
 
-   * Kernel RBF, parameter C dan γ dioptimasi melalui grid search
-4. **Evaluasi**
+* **svm\_model3.pkl**
+  Model SVM terlatih yang digunakan oleh aplikasi.
 
-   * Metrik: akurasi, presisi, recall, F1-score
+## Alur Kerja
 
-## Prasyarat
+1. **Persiapan Dataset**
 
-Pastikan lingkungan pengembangan memenuhi:
+   * Unduh dan ekstrak dataset ke folder `Dataset/` seperti struktur di atas.
+2. **Notebook Pemrosesan & Pelatihan**
 
-* Python 3.8 atau lebih tinggi
+   * Buka `Code_Mengolah_Dataset.ipynb` di Jupyter Notebook/ JupyterLab.
+   * Jalankan sel-sel secara berurutan untuk:
+
+     * Memuat dan menampilkan sampel citra
+     * Mengekstraksi dan menskalakan fitur
+     * Membagi data dan melatih model SVM
+     * Menyimpan `Hasil_scale.xlsx` dan `svm_model3.pkl`
+3. **Menjalankan Aplikasi Web**
+
+   * Ekstrak `GUI.zip` atau pastikan folder `GUI/` telah tersedia.
+   * Jalankan server Flask:
+
+     ```bash
+     cd GUI
+     python app.py
+     ```
+   * Buka browser dan akses `http://127.0.0.1:5000`.
+   * Unggah citra kakao untuk klasifikasi; hasil tampilan kategori akan muncul.
+
+## Persyaratan
+
+* Python 3.7+
+* Jupyter Notebook / JupyterLab
 * Paket Python:
 
   ```bash
-  pip install scikit-learn pandas numpy matplotlib seaborn
+  pip install numpy pandas opencv-python scikit-learn matplotlib seaborn openpyxl flask
   ```
+* Folder `Dataset/` berisi citra kakao (Mentah, Matang, Busuk).
 
-## Instalasi
+## Mendapatkan Dataset
 
-1. **Clone repositori**
+Dataset dapat diunduh dari Google Drive berikut:
+[Link Google Drive Dataset](https://drive.google.com/drive/folders/1dvTbQ6laEP_HZ8KIP6_UyW0aWMFFXWlV?usp=sharing)
 
-   ```bash
-   git clone https://github.com/ZulfikarRM/Sistem_Klasifikasi_Ikan_Pelagis_Menggunakan_Naive_Bayes.git
-   cd Sistem_Klasifikasi_Ikan_Pelagis_Menggunakan_Naive_Bayes
-   ```
-2. **Buat lingkungan virtual (opsional)**
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate    # Linux / macOS
-   venv\Scripts\activate     # Windows
-   ```
-3. **Instal dependensi**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Penggunaan
-
-1. **Persiapkan dataset**
-
-   * Ekstrak seluruh file dari folder Google Drive ke direktori `data/`
-2. **Jalankan skrip pelatihan**
-
-   ```bash
-   python src/train_svm.py --config config/params.yaml
-   ```
-3. **Antarmuka GUI (opsional)**
-
-   * Ekstrak `GUI.zip` ke folder `gui/`
-   * Ikuti petunjuk dalam `gui/README_GUI.md`
-
-## Hasil dan Evaluasi
-
-* **Akurasi Tertinggi**: 92,5%
-* **F1-Score (kelas tinggi)**: 0.94
-
-Perbandingan kinerja model dengan penggunaan fitur tunggal dan hybrid tersedia di folder `results/`.
-
-## Kontribusi
-
-Kontribusi sangat dihargai. Langkah:
-
-1. Fork repositori ini
-2. Buat branch baru (`git checkout -b fitur-baru`)
-3. Commit perubahan (`git commit -m "Tambah fitur X"`)
-4. Push ke branch (`git push origin fitur-baru`)
-5. Buat Pull Request
+1. Klik tautan di atas.
+2. Pilih seluruh folder dan unduh sebagai ZIP.
+3. Ekstrak dan letakkan hasilnya ke direktori `Dataset/` di root repositori.
